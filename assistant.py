@@ -99,7 +99,7 @@ def main():
             while True:
                 print sc.rtm_read()
                 for item in sc.rtm_read():
-                    user = item.get("user")
+                    #user = item.get("user")
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
                     print message + ""
