@@ -37,6 +37,7 @@ nickname = "Metro"
 dump = "#dump"
 channel = "#planif"
 wakka = "^\.\.(|\s)"
+session = "Chalet Hiver 2018"
 
 ###################################################################### Traceback to Slack
 def report_exception(exc_type, exc_value, exc_tb):
@@ -91,9 +92,9 @@ def command_parse(text,user):
                     report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[i-1] for i in range(row.len()))
                 slackmsg(report)
             else:
-                slackmsg("*La list des depenses est vide*")
-        elif re.search(wakka + "log" + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(.*)", text) is not None:
-            r = re.search(wakka + "log" + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(.*)", text)
+                slackmsg("La list des depenses est vide")
+        elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(|(.*))", text) is not None:
+            r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(|(.*))", text)
             matches = r.groups()
             cash = matches[1]
             desc = matches[2] if matches[2] else ""
