@@ -83,13 +83,14 @@ def command_parse(text,user):
         slackmsg("Salope!")
 
     elif re.search(wakka + "log", text) is not None:
+        # user, cash, description, session, timestamp
         if re.search(wakka + "log$", text) is not None:
             db_rows = c.execute("SELECT * FROM depenses")
             db_rows = db_rows.fetchall()
             if db_rows:
                 report = "*Voice la liste des depenses*"
                 for row in db_rows:
-                    report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[i-1] for i in range(row.len()))
+                    report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
                 slackmsg(report)
             else:
                 slackmsg("La list des depenses est vide")
@@ -98,20 +99,32 @@ def command_parse(text,user):
             matches = r.groups()
             cash = matches[1]
             desc = matches[2] #if matches[2] else ""
-            # user text, cash text, description text, session text, timestamp time
+
             c.execute("INSERT INTO depenses (user, cash, description, session, timestamp) Values (?,?,?,?,?)", (user,cash,desc,session,maketimestamp()))
             conn.commit()
-            db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
-            db_rows = db_rows.fetchall()
-            slackmsg(db_rows)
+            #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
+            #db_rows = db_rows.fetchall()
+            if desc:
+                slackmsg("*{0}* a paye {1}$".format(user,cash)
+            else:
+                slackmsg("*{0}* a paye {1}$ de {0}".format(user,cash,desc)
 
         else:
-            slackmsg("Votre commande est aussi erronee qu'une jobe de moutarde.")
+            slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
 
 
     elif re.search(wakka + "flush", text) is not None:
-        c.execute("DELETE FROM depenses")
+        c.execute("DELETE FROM depenses WHERE user = ?",(user))
         conn.commit()
+        slackmsg("J'ai efface toutes les depenses de {0}".format(user))
+
+    elif re.search(wakka + "flush all", text) is not None:
+        if user == "Manu":
+            c.execute("DELETE FROM depenses")
+            conn.commit()
+            slackmsg("J'ai vide la liste de depenses")
+        else:
+            slackmsg("Bel essai, salope")
 
     conn.close()
 
