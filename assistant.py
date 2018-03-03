@@ -104,10 +104,10 @@ def command_parse(text,user):
             conn.commit()
             #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
             #db_rows = db_rows.fetchall()
-            if desc:
-                slackmsg("*{0}* a paye {1}$".format(user,cash)
+            if desc is not none:
+                slackmsg("*{0}* a paye {1}$".format(user,cash))
             else:
-                slackmsg("*{0}* a paye {1}$ de {0}".format(user,cash,desc)
+                slackmsg("*{0}* a paye {1}$ de {0}".format(user,cash,desc))
 
         else:
             slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
