@@ -88,7 +88,7 @@ def command_parse(text,user):
             slackmsg("gogo")
             r = re.search(wakka + "log" + "\s(\d{1,4}\.\d{1,2})\s(.*)", text)
         else:
-            slackmsg("Votre commande est aussi érronée q'une jobe de moutarde.")
+            slackmsg("Votre commande est aussi erronee qu'une jobe de moutarde.")
 
 
 
