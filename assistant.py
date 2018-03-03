@@ -65,12 +65,10 @@ def slackmsg(msg):
     #req = requests.get(url,headers=headers,json=data)
     sc.api_call("chat.postMessage", username=nickname, channel=channel, text=msg, icon_emoji=avatar)
 
+# Converting user Id to display name
 def map_user(user):
-    print "Map"
     userinfo = sc.api_call("users.info", user=user)
-    #return userinfo.get("display_name")
-    print userinfo["user"]["profile"]["display_name"]
-
+    return userinfo["user"]["profile"]["display_name"]
 
 # This functions parses the commands
 def command_parse(text,user):
@@ -78,18 +76,24 @@ def command_parse(text,user):
     conn = sqlite3.connect("./metro.db")
     print "DB OK"
 
-    map_user(user)
+    user = map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
         slackmsg("Salope!")
 
     elif re.search(wakka + "log", text) is not None:
-        slackmsg("log")
+        if re.search(wakka + "log$", text) is not None:
+            slackmsg("La liste")
+        elif re.search(wakka + "log" + "\s(\d{1,4}\.\d{1,2})\s(.*)")
+            slackmsg("gogo")
+            r = re.search(wakka + "log" + "\s(\d{1,4}\.\d{1,2})\s(.*)")
+        else:
+            slackmsg("Votre commande est aussi érronée q'une jobe de moutarde.")
+
 
 
     conn.close()
 
-#[{u'source_team': u'T9CAYVA05', u'text': u'heyoyoyo', u'ts': u'1520093569.000038', u'user': u'U9BLN3H5F', u'team': u'T9CAYVA05', u'type': u'message', u'channel': u'C9E66SALT'}]
 ########################################################################################
 def main():
     try:
