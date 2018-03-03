@@ -67,7 +67,7 @@ def slackmsg(msg):
 
 def map_user(user):
     print "Map"
-    userinfo = sc.users.info(user)
+    userinfo = sc.api_call("users.info", user=user)
     print userinfo
 
 
@@ -77,7 +77,7 @@ def command_parse(text,user):
     conn = sqlite3.connect("./metro.db")
     print "DB OK"
 
-    #map_user(user)
+    map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
         slackmsg("Salope!")
