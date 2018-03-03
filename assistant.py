@@ -56,7 +56,7 @@ sys.excepthook = custom_excepthook
 # This function generates a timestamp
 def maketimestamp():
     tsnow = datetime.datetime.now()
-    timenow = (tsnow.strftime('%Y-%m-%d-%H:%M:%S'))
+    timenow = (tsnow.strftime('%Y-%m-%d'))
     return timenow
 
 # This function sends messages to Slack
@@ -83,10 +83,25 @@ def command_parse(text,user):
 
     elif re.search(wakka + "log", text) is not None:
         if re.search(wakka + "log$", text) is not None:
-            slackmsg("La liste")
-        elif re.search(wakka + "log" + "(|\s(\d{1,4}\.\d{1,2})\s(.*))", text) is not None:
-            slackmsg("gogo")
-            r = re.search(wakka + "log" + "\s(\d{1,4}\.\d{1,2})\s(.*)", text)
+            db_rows = c.execute("SELECT * FROM depenses")
+            db_rows = db_rows.fetchall()
+            if db_rows:
+                report = "*Voice la liste des depenses*"
+                for row in db_rows:
+                    report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[i-1] for i in range(row.len())
+                slackmsg(report)
+        elif re.search(wakka + "log" + "(\d{1,4}\.\d{1,2})\s(.*)", text) is not None:
+            r = re.search(wakka + "log" + "(\d{1,4}\.\d{1,2})\s(.*)", text)
+            matches = r.groups()
+            cash = matches[1]
+            desc = matches[2] if matches[2] else ""
+            # user text, cash text, description text, session text, timestamp time
+            c.execute("INSERT INTO depenses (user, cash, description, session, timestamp) Values (?,?,?,?,?)", (user,cash,desc,session,maketimestamp()))
+            conn.commit()
+            db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
+            db_rows = db_rows.fetchall()
+            slackmsg(db_rows)
+
         else:
             slackmsg("Votre commande est aussi erronee qu'une jobe de moutarde.")
 
