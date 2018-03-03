@@ -74,7 +74,7 @@ def map_user(user):
 def command_parse(text,user):
 
     conn = sqlite3.connect("./metro.db")
-    print "DB OK"
+    c = conn.cursor()
 
     user = map_user(user)
 
@@ -88,7 +88,7 @@ def command_parse(text,user):
             if db_rows:
                 report = "*Voice la liste des depenses*"
                 for row in db_rows:
-                    report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[i-1] for i in range(row.len())
+                    report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[i-1] for i in range(row.len()))
                 slackmsg(report)
         elif re.search(wakka + "log" + "(\d{1,4}\.\d{1,2})\s(.*)", text) is not None:
             r = re.search(wakka + "log" + "(\d{1,4}\.\d{1,2})\s(.*)", text)
