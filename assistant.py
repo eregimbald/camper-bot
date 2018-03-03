@@ -1,4 +1,5 @@
 #!/usr/bin/python2.7
+#coding=utf-16
 
 # V1.00
 # Slack Assistant
