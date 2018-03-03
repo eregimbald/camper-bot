@@ -72,9 +72,13 @@ def command_parse(text):
     print "DB OK"
 
     if re.search(wakka + "aide", text) is not None:
-        slackmsg("Salope!")
+        slackmsg("1")
 
+    if re.search("{0}aide".format(wakka), text) is not None:
+        slackmsg("2")
 
+    if re.search("^\.\.(|\s)aide", text) is not None:
+        slackmsg("3")
 
 
 
