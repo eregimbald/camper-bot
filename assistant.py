@@ -36,7 +36,7 @@ dump = "#dump"
 channel = "#planif"
 wakka = "^\.\.(|\s)"
 session = "Chalet Hiver 2018"
-
+testmode = False
 ###################################################################### Traceback to Slack
 def report_exception(exc_type, exc_value, exc_tb):
     sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="```{0}\n{1}\n{2}```".format(
@@ -94,7 +94,7 @@ def command_parse(text,user):
             if db_rows:
                 report = "*Voici nos meilleures citations (Je promet rien)*"
                 for row in db_rows:
-                    report += "\n{0} - *{1}*".format(row[0],row[1])
+                    report += "\n*{0}* - {1}".format(row[0],row[1])
                 slackmsg(report)
             else:
                 slackmsg("La list des citations est vide")
@@ -130,7 +130,7 @@ def command_parse(text,user):
             conn.commit()
             #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
             #db_rows = db_rows.fetchall()
-            slackmsg("*{0}* a paye {1}$ de {2}".format(user,cash,desc))
+            slackmsg("*{0}* a payé {1}$ de {2}".format(user,cash,desc))
 
         else:
             slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
@@ -174,8 +174,8 @@ def main():
 ########################################################################################
 #main()
 ########################################################################################
-#if testmode ==  True:
-main()
-#else:
-#    daemon = Daemonize(app=app, pid=pid, action=main)
-#    daemon.start()
+if testmode ==  True:
+    main()
+else:
+    daemon = Daemonize(app=app, pid=pid, action=main)
+    daemon.start()
