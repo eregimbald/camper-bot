@@ -76,7 +76,7 @@ def command_parse(text,user):
 
     conn = sqlite3.connect("./metro.db")
     print "DB OK"
-    
+
     map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
@@ -102,7 +102,8 @@ def main():
                     user = item.get("user")
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
-                    if re.search(r'^\.\.',message):
+                    print message
+                    if re.search(wakka,message):
                         command_parse(message,user)
                 time.sleep(0.5)
         else:
