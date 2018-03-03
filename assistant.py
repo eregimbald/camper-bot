@@ -93,11 +93,11 @@ def command_parse(text,user):
                 slackmsg(report)
             else:
                 slackmsg("La list des depenses est vide")
-        elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(|(.*))", text) is not None:
-            r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(|(.*))", text)
+        elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})(.*)", text) is not None:
+            r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})(.*)", text)
             matches = r.groups()
             cash = matches[1]
-            desc = matches[2] if matches[2] else ""
+            desc = matches[2] #if matches[2] else ""
             # user text, cash text, description text, session text, timestamp time
             c.execute("INSERT INTO depenses (user, cash, description, session, timestamp) Values (?,?,?,?,?)", (user,cash,desc,session,maketimestamp()))
             conn.commit()
@@ -109,6 +109,9 @@ def command_parse(text,user):
             slackmsg("Votre commande est aussi erronee qu'une jobe de moutarde.")
 
 
+    elif re.search(wakka + "flush", text) is not None:
+        c.execute("DELETE FROM depenses")
+        conn.commit()
 
     conn.close()
 
