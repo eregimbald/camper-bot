@@ -2,11 +2,8 @@
 #coding=utf-8
 
 # V1.00
-# Slack Assistant
-# Tally-up tracking
-# Date-time tracking
+# Session
 # Auto-meeting
-# Webhook
 # log quote
 
 import syslog
@@ -34,7 +31,7 @@ headers={'Content-Type': 'application/json'}
 ###################################################################### Vars
 pid = "/tmp/sassist.pid"
 app = "assistant"
-nickname = "Metro"
+nickname = "Métro"
 dump = "#dump"
 channel = "#planif"
 wakka = "^\.\.(|\s)"
@@ -81,7 +78,30 @@ def command_parse(text,user):
     user = map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
-        slackmsg("Salope!")
+        report  = "*Chaque commande doit être précédée de ..*"
+        report += "\nExemple: `..log` OU `.. log`"
+        report += "\n..log - Affiche la liste des dépenses"
+        report += "\n..log 111.11 sac de patates - Crée une dépense pour un sac de patates à 111.11$ (p.s tu t'es fait fourrer)"
+        report += "\n..quote - Affiche la liste des citations"
+        report += "\n..quote Alphonse n'importe quoi - Crée une citation au nom d'Alphonse"
+        report += "\n..flush - Éfface toutes les dépense au nom de l'utilisateur"
+
+    if re.search(wakka + "quote", text) is not None:
+        if re.search(wakka + "quote$", text) is not None:
+            db_rows = c.execute("SELECT * FROM quotes")
+            db_rows = db_rows.fetchall()
+            if db_rows:
+                report = "*Voici nos meilleures citations (Je promet rien)*"
+                for row in db_rows:
+                    report += "\n{0} - *{1}*".format(row[0],row[1])
+                slackmsg(report)
+            else:
+                slackmsg("La list des citations est vide")
+        elif re.search(wakka + "quote\s(.*)", text) is not None:
+            matches = r.groups()
+            quote = matches[1]
+            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (user,quote)
+            conn.commit()
 
     elif re.search(wakka + "log", text) is not None:
         # user, cash, description, session, timestamp
@@ -89,7 +109,7 @@ def command_parse(text,user):
             db_rows = c.execute("SELECT * FROM depenses")
             db_rows = db_rows.fetchall()
             if db_rows:
-                report = "*Voice la liste des dépenses*"
+                report = "*Voici la liste des dépenses*"
                 total = float()
                 for row in db_rows:
                     report += "\n*{0}* | {1}$ | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
@@ -108,10 +128,7 @@ def command_parse(text,user):
             conn.commit()
             #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
             #db_rows = db_rows.fetchall()
-            if desc == "":
-                slackmsg("*{0}* a paye {1}$".format(user,cash))
-            else:
-                slackmsg("*{0}* a paye {1}$ de {2}".format(user,cash,desc))
+            slackmsg("*{0}* a paye {1}$ de {2}".format(user,cash,desc))
 
         else:
             slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
@@ -125,8 +142,9 @@ def command_parse(text,user):
     elif re.search(wakka + "flush all$", text) is not None:
         if user == "Manu":
             c.execute("DELETE FROM depenses")
+            c.execute("DELETE FROM quotes")
             conn.commit()
-            slackmsg("J'ai vide la liste de dépenses")
+            slackmsg("J'ai vidé les listes")
         else:
             slackmsg("Bel essai, salope")
 
