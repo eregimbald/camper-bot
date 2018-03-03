@@ -98,10 +98,11 @@ def command_parse(text,user):
                 slackmsg(report)
             else:
                 slackmsg("La list des citations est vide")
-        elif re.search(wakka + "quote\s(.*)\s(.*)", text) is not None:
-            r = re.search(wakka + "quote\s(.*)\s(.*)", text)
+        elif re.search(wakka + "quote\s(\w*)\s(.*)", text) is not None:
+            r = re.search(wakka + "quote\s(\w*)\s(.*)", text)
             matches = r.groups()
             c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (matches[1],matches[2]))
+            slackmsg("{0} - *{1}*".format(matches[2],matches[1]))
             conn.commit()
 
     elif re.search(wakka + "log", text) is not None:
