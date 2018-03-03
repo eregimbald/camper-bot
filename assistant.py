@@ -68,7 +68,8 @@ def slackmsg(msg):
 def map_user(user):
     print "Map"
     userinfo = sc.api_call("users.info", user=user)
-    print userinfo
+    #return userinfo.get("display_name")
+    print userinfo.get("display_name")
 
 
 # This functions parses the commands
