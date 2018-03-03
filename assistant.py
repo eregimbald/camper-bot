@@ -89,12 +89,12 @@ def command_parse(text,user):
             db_rows = c.execute("SELECT * FROM depenses")
             db_rows = db_rows.fetchall()
             if db_rows:
-                report = "*Voice la liste des depenses*"
+                report = "*Voice la liste des dépenses*"
                 for row in db_rows:
                     report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
                 slackmsg(report)
             else:
-                slackmsg("La list des depenses est vide")
+                slackmsg("La list des dépenses est vide")
         elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})(.*)", text) is not None:
             r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})(.*)", text)
             matches = r.groups()
@@ -105,7 +105,7 @@ def command_parse(text,user):
             conn.commit()
             #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
             #db_rows = db_rows.fetchall()
-            if desc is not none:
+            if desc is None:
                 slackmsg("*{0}* a paye {1}$".format(user,cash))
             else:
                 slackmsg("*{0}* a paye {1}$ de {0}".format(user,cash,desc))
@@ -114,16 +114,16 @@ def command_parse(text,user):
             slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
 
 
-    elif re.search(wakka + "flush", text) is not None:
-        c.execute("DELETE FROM depenses WHERE user = ?",(user))
+    elif re.search(wakka + "flush$", text) is not None:
+        c.execute("DELETE FROM depenses WHERE user = ?",(user,))
         conn.commit()
-        slackmsg("J'ai efface toutes les depenses de {0}".format(user))
+        slackmsg("J'ai efface toutes les dépenses de {0}".format(user))
 
-    elif re.search(wakka + "flush all", text) is not None:
+    elif re.search(wakka + "flush all$", text) is not None:
         if user == "Manu":
             c.execute("DELETE FROM depenses")
             conn.commit()
-            slackmsg("J'ai vide la liste de depenses")
+            slackmsg("J'ai vide la liste de dépenses")
         else:
             slackmsg("Bel essai, salope")
 
