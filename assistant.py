@@ -15,6 +15,7 @@ import os
 import time
 import datetime
 import sys
+import traceback
 from daemonize import Daemonize
 from slackclient import SlackClient
 
@@ -29,23 +30,24 @@ import requests
 url = "https://hooks.slack.com/services/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"
 headers={'Content-Type': 'application/json'}
 
-######################### TESTMODE
-testmode = False
-###################################################################### SQL and Slack token
-if testmode == True:
-    pid = "/tmp/sassist-qa.pid"
-    app = "assistant-qa"
-    nickname = "Camper"
-    dump = "#dump"
-    channel = "#planif"
-else:
-    pid = "/tmp/sassist.pid"
-    app = "assistant"
-    nickname = "Camper"
-    dump = "#dump"
-    channel = "#planif
-###################################################################### Others
+###################################################################### Vars
+pid = "/tmp/sassist.pid"
+app = "assistant"
+nickname = "Metro"
+dump = "#dump"
+channel = "#planif"
 wakka = "^\.\.(|\s)"
+
+###################################################################### Traceback to Slack
+def report_exception(exc_type, exc_value, exc_tb):
+    sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="{0}\n{1}\n{2}".format(
+        exc_type,exc_value,''.join(traceback.format_tb(exc_tb))))
+
+def custom_excepthook(exc_type, exc_value, exc_tb):
+    report_exception(exc_type, exc_value, exc_tb)
+    sys.__excepthook__(exc_type, exc_value, exc_tb)  # run standard exception hook
+
+sys.excepthook = custom_excepthook
 
 ########################################################################################
 # Functions()
@@ -66,7 +68,7 @@ def slackmsg(msg):
 # This functions parses the commands
 def command_parse(text):
 
-    conn = sqlite3.connect("./camper.db".format(db_path))
+    conn = sqlite3.connect("./camper.db")
     print "DB OK"
 
     if re.search(wakka + "aide", text) is not None:
@@ -95,7 +97,7 @@ def main():
     except (SystemExit, KeyboardInterrupt):
         raise
     except Exception, e:
-        sc.api_call("chat.postMessage", username=nickname, channel=dump, text="{0}".format(e), icon_emoji=avatar)
+        raise RuntimeError(e)
 
 ########################################################################################
 #main()
