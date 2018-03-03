@@ -73,7 +73,7 @@ def map_user(user):
 # This functions parses the commands
 def command_parse(text,user):
 
-    conn = sqlite3.connect("{0}metro.db".format(db_path))
+    conn = sqlite3.connect("{0}metro.db".format(dbpath))
     c = conn.cursor()
 
     user = map_user(user)
