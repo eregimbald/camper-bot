@@ -94,9 +94,10 @@ def main():
     try:
         if sc.rtm_connect():
             while True:
-                for item in sc.rtm_read():
-                    message = item.get("text")
-                    message = message.encode("utf-8") if message else ""
+                #for item in sc.rtm_read():
+                message = sc.rt_read("text")
+                message = message.encode("utf-8") if message else ""
+                #user =
                     if re.search(wakka,message):
                         command_parse(message)
                 time.sleep(0.5)
