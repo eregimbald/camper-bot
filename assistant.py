@@ -103,6 +103,7 @@ def main():
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
                     print message + ""
+                    user = ""
                     if re.search(wakka,message):
                         command_parse(message,user)
                 time.sleep(0.5)
