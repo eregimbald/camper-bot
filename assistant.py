@@ -85,6 +85,7 @@ def command_parse(text,user):
         report += "\n..quote - Affiche la liste des citations"
         report += "\n..quote Alphonse n'importe quoi - Crée une citation au nom d'Alphonse"
         report += "\n..flush - Éfface toutes les dépense au nom de l'utilisateur"
+        slackmsg(report)
 
     if re.search(wakka + "quote", text) is not None:
         if re.search(wakka + "quote$", text) is not None:
@@ -100,7 +101,7 @@ def command_parse(text,user):
         elif re.search(wakka + "quote\s(.*)", text) is not None:
             matches = r.groups()
             quote = matches[1]
-            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (user,quote)
+            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (user,quote))
             conn.commit()
 
     elif re.search(wakka + "log", text) is not None:
