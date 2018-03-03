@@ -90,8 +90,11 @@ def command_parse(text,user):
             db_rows = db_rows.fetchall()
             if db_rows:
                 report = "*Voice la liste des dépenses*"
+                total = float()
                 for row in db_rows:
                     report += "\n*{0}* | {1}$ | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
+                    total += float(row[1])
+                report += "\n *Total:* {0}$".format(round(total))
                 slackmsg(report)
             else:
                 slackmsg("La list des dépenses est vide")
@@ -108,7 +111,7 @@ def command_parse(text,user):
             if desc == "":
                 slackmsg("*{0}* a paye {1}$".format(user,cash))
             else:
-                slackmsg("*{0}* a paye {1}$ de {0}".format(user,cash,desc))
+                slackmsg("*{0}* a paye {1}$ de {2}".format(user,cash,desc))
 
         else:
             slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
