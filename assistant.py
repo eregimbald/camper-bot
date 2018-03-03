@@ -1,5 +1,5 @@
 #!/usr/bin/python2.7
-#coding=utf-16
+#coding=utf-8
 
 # V1.00
 # Slack Assistant
@@ -91,7 +91,7 @@ def command_parse(text,user):
             if db_rows:
                 report = "*Voice la liste des dépenses*"
                 for row in db_rows:
-                    report += "\n*{0}* | {1} | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
+                    report += "\n*{0}* | {1}$ | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
                 slackmsg(report)
             else:
                 slackmsg("La list des dépenses est vide")
@@ -105,7 +105,7 @@ def command_parse(text,user):
             conn.commit()
             #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
             #db_rows = db_rows.fetchall()
-            if desc is None:
+            if desc == "":
                 slackmsg("*{0}* a paye {1}$".format(user,cash))
             else:
                 slackmsg("*{0}* a paye {1}$ de {0}".format(user,cash,desc))
@@ -117,7 +117,7 @@ def command_parse(text,user):
     elif re.search(wakka + "flush$", text) is not None:
         c.execute("DELETE FROM depenses WHERE user = ?",(user,))
         conn.commit()
-        slackmsg("J'ai efface toutes les dépenses de {0}".format(user))
+        slackmsg("J'ai effacé toutes les dépenses de {0}".format(user))
 
     elif re.search(wakka + "flush all$", text) is not None:
         if user == "Manu":
