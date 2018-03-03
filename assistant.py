@@ -91,6 +91,9 @@ def command_parse(text,user):
 #[{u'source_team': u'T9CAYVA05', u'text': u'heyoyoyo', u'ts': u'1520093569.000038', u'user': u'U9BLN3H5F', u'team': u'T9CAYVA05', u'type': u'message', u'channel': u'C9E66SALT'}]
 ########################################################################################
 def main():
+
+    user = ""
+
     print "start"
     try:
         print "trying"
@@ -102,10 +105,10 @@ def main():
                     #user = item.get("user")
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
-                    print message + ""
-                    user = ""
                     if re.search(wakka,message):
                         command_parse(message,user)
+                    else:
+                        print "nope"
                 time.sleep(0.5)
         else:
             print "not open "
