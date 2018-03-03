@@ -66,15 +66,17 @@ def slackmsg(msg):
     sc.api_call("chat.postMessage", username=nickname, channel=channel, text=msg, icon_emoji=avatar)
 
 def map_user(user):
+    print "Map"
     userinfo = sc.users.info(user)
     print userinfo
-    
+
 
 # This functions parses the commands
 def command_parse(text,user):
 
     conn = sqlite3.connect("./metro.db")
-
+    print "DB OK"
+    
     map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
