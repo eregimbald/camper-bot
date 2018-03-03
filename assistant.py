@@ -95,11 +95,12 @@ def main():
         if sc.rtm_connect():
             while True:
                 #for item in sc.rtm_read():
-                message = sc.rt_read("text")
+                readinfo = sc.rtm_read()
+                message = readinfo.get("text")
                 message = message.encode("utf-8") if message else ""
-                #user =
-                    if re.search(wakka,message):
-                        command_parse(message)
+                user = readinfo.get("user")
+                if re.search(wakka,message):
+                    command_parse(message)
                 time.sleep(0.5)
         else:
             print "not open "
