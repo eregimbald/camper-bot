@@ -40,7 +40,7 @@ wakka = "^\.\.(|\s)"
 
 ###################################################################### Traceback to Slack
 def report_exception(exc_type, exc_value, exc_tb):
-    sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="{0}\n{1}\n{2}".format(
+    sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="```{0}\n{1}\n{2}```".format(
         exc_type,exc_value,''.join(traceback.format_tb(exc_tb))))
 
 def custom_excepthook(exc_type, exc_value, exc_tb):
@@ -72,15 +72,13 @@ def command_parse(text):
     print "DB OK"
 
     if re.search(wakka + "aide", text) is not None:
-        slackmsg("1")
+        slackmsg("Salope!")
 
-    if re.search("{0}aide".format(wakka), text) is not None:
-        slackmsg("2")
-
-    if re.search("^\.\.(|\s)aide", text) is not None:
-        slackmsg("3")
+    elif re.search(wakka + "log", text) is not None:
+        slackmsg("Salope!")
 
 
+    conn.close()
 
 ########################################################################################
 def main():
@@ -90,6 +88,7 @@ def main():
         if sc.rtm_connect():
             print "open"
             while True:
+                print sc.rtm_read()
                 for item in sc.rtm_read():
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
