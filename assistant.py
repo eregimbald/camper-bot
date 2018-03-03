@@ -69,7 +69,7 @@ def map_user(user):
     print "Map"
     userinfo = sc.api_call("users.info", user=user)
     #return userinfo.get("display_name")
-    print userinfo.get("display_name")
+    print userinfo["user"]["profile"]["display_name"]
 
 
 # This functions parses the commands
