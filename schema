@@ -1,1 +1,2 @@
 CREATE TABLE depenses (user text, cash text, description text, session text, timestamp time);
+CREATE TABLE quotes (user text, quote text);

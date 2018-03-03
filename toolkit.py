@@ -41,7 +41,7 @@ def new():
 #    c.execute("drop table bgp_state")
 #    c.execute("drop table bgp_neighbor")
 #CREATE TABLE throttle (id INTEGER PRIMARY KEY, message text, latest text, time text, counter integer);
-    c.execute("CREATE TABLE depenses (user text, cash text, description text, session text, timestamp time)")
+    c.execute("CREATE TABLE quotes (user text, quote text)")
 
 def load(mylist):
     print "load"
