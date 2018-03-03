@@ -98,8 +98,8 @@ def main():
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
                     user = item.get("user")
-                if re.search(wakka,message):
-                    command_parse(message)
+                    if re.search(wakka,message):
+                        command_parse(message,user)
                 time.sleep(0.5)
         else:
             print "not open "
