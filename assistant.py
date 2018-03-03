@@ -94,12 +94,12 @@ def command_parse(text,user):
                 for row in db_rows:
                     report += "\n*{0}* | {1}$ | {2} | {3} | {4}".format(row[0],row[1],row[2],row[3],row[4],)
                     total += float(row[1])
-                report += "\n *Total:* {0}$".format(round(total))
+                report += "\n *Total:* {0}$".format(round(total,2))
                 slackmsg(report)
             else:
                 slackmsg("La list des dépenses est vide")
-        elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})(.*)", text) is not None:
-            r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})(.*)", text)
+        elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(.*)", text) is not None:
+            r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(.*)", text)
             matches = r.groups()
             cash = matches[1]
             desc = matches[2] #if matches[2] else ""
