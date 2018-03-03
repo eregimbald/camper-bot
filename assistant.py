@@ -65,21 +65,28 @@ def slackmsg(msg):
     #req = requests.get(url,headers=headers,json=data)
     sc.api_call("chat.postMessage", username=nickname, channel=channel, text=msg, icon_emoji=avatar)
 
-# This functions parses the commands
-def command_parse(text):
+def map_user(user):
+    userinfo = sc.users.info(user)
+    print userinfo
+    
 
-    conn = sqlite3.connect("./camper.db")
-    print "DB OK"
+# This functions parses the commands
+def command_parse(text,user):
+
+    conn = sqlite3.connect("./metro.db")
+
+    map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
         slackmsg("Salope!")
 
     elif re.search(wakka + "log", text) is not None:
-        slackmsg("Salope!")
+        slackmsg("log")
 
 
     conn.close()
 
+#[{u'source_team': u'T9CAYVA05', u'text': u'heyoyoyo', u'ts': u'1520093569.000038', u'user': u'U9BLN3H5F', u'team': u'T9CAYVA05', u'type': u'message', u'channel': u'C9E66SALT'}]
 ########################################################################################
 def main():
     print "start"
@@ -90,10 +97,11 @@ def main():
             while True:
                 print sc.rtm_read()
                 for item in sc.rtm_read():
+                    user = item.get("user")
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
                     if re.search(r'^\.\.',message):
-                        command_parse(message)
+                        command_parse(message,user)
                 time.sleep(0.5)
         else:
             print "not open "
