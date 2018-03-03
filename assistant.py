@@ -77,7 +77,7 @@ def command_parse(text,user):
     conn = sqlite3.connect("./metro.db")
     print "DB OK"
 
-    map_user(user)
+    #map_user(user)
 
     if re.search(wakka + "aide", text) is not None:
         slackmsg("Salope!")
@@ -91,24 +91,14 @@ def command_parse(text,user):
 #[{u'source_team': u'T9CAYVA05', u'text': u'heyoyoyo', u'ts': u'1520093569.000038', u'user': u'U9BLN3H5F', u'team': u'T9CAYVA05', u'type': u'message', u'channel': u'C9E66SALT'}]
 ########################################################################################
 def main():
-
-    user = ""
-
-    print "start"
     try:
-        print "trying"
         if sc.rtm_connect():
-            print "open"
             while True:
-                print sc.rtm_read()
                 for item in sc.rtm_read():
-                    #user = item.get("user")
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
                     if re.search(wakka,message):
-                        command_parse(message,user)
-                    else:
-                        print "nope"
+                        command_parse(message)
                 time.sleep(0.5)
         else:
             print "not open "
