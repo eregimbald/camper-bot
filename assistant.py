@@ -80,11 +80,11 @@ def command_parse(text,user):
     if re.search(wakka + "aide", text) is not None:
         report  = "*Chaque commande doit être précédée de ..*"
         report += "\nExemple: `..log` OU `.. log`"
-        report += "\n..log - Affiche la liste des dépenses"
-        report += "\n..log 111.11 sac de patates - Crée une dépense pour un sac de patates à 111.11$ (p.s tu t'es fait fourrer)"
-        report += "\n..quote - Affiche la liste des citations"
-        report += "\n..quote Alphonse n'importe quoi - Crée une citation au nom d'Alphonse"
-        report += "\n..flush - Éfface toutes les dépense au nom de l'utilisateur"
+        report += "\n*..log* - Affiche la liste des dépenses"
+        report += "\n*..log 111.11 sac de patates* - Crée une dépense pour un sac de patates à 111.11$ (p.s tu t'es fait fourrer)"
+        report += "\n*..quote* - Affiche la liste des citations"
+        report += "\n*..quote Alphonse n'importe quoi* - Crée une citation au nom d'Alphonse"
+        report += "\n*..flush* - Éfface toutes les dépense au nom de l'utilisateur"
         slackmsg(report)
 
     if re.search(wakka + "quote", text) is not None:
@@ -101,8 +101,7 @@ def command_parse(text,user):
         elif re.search(wakka + "quote\s(.*)", text) is not None:
             r = re.search(wakka + "quote\s(.*)", text)
             matches = r.groups()
-            quote = matches[1]
-            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (user,quote))
+            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (matches[1],matches[2]))
             conn.commit()
 
     elif re.search(wakka + "log", text) is not None:
