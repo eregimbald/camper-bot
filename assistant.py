@@ -95,7 +95,8 @@ def main():
         if sc.rtm_connect():
             while True:
                 #for item in sc.rtm_read():
-                data = json.load(sc.rtm_read())
+                data = sc.rtm_read()
+                data = json.load(data)
                 message = data["text"]
                 message = message.encode("utf-8") if message else ""
                 user = data["user"]
