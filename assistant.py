@@ -39,7 +39,7 @@ acc = "\s([-'0-9a-zÀ-ÿ]+)"
 accs = "\s([-'0-9a-zÀ-ÿ\s]+)"
 session = "Chalet Hiver 2018"
 testmode = True
-###################################################################### Traceback to Slack
+###################################################################### Traceback to Slack - Manque le traceback au complet
 def report_exception(exc_type, exc_value, exc_tb):
     sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="```{0}\n{1}\n{2}```".format(
         exc_type,exc_value,''.join(traceback.format_tb(exc_tb))))
@@ -74,7 +74,7 @@ def map_user(user):
 # This functions parses the commands
 def command_parse(text,user):
 
-    conn = sqlite3.connect("./metro.db",charset="utf8")
+    conn = sqlite3.connect("./metro.db")
     c = conn.cursor()
 
     user = map_user(user)
