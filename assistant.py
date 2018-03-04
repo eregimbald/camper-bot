@@ -29,16 +29,18 @@ avatar = ":metro-robo:"
 #headers={'Content-Type': 'application/json'}
 
 ###################################################################### Vars
+testmode = False
+
 pid = "/tmp/sassist.pid"
 app = "assistant"
 nickname = "Métro"
 dump = "#dump"
-channel = "#planif"
+channel = "#planif" if testmode == True else "#general"
 wak = "(?i)^\.\.(?:|\s)"
 acc = "\s([-'0-9a-zÀ-ÿ]+)"
 accs = "\s([-'0-9a-zÀ-ÿ\s]+)"
 session = "Chalet Hiver 2018"
-testmode = True
+
 ###################################################################### Traceback to Slack - Manque le traceback au complet
 def report_exception(exc_type, exc_value, exc_tb):
     sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="```{0}\n{1}\n{2}```".format(
