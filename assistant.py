@@ -40,7 +40,7 @@ wak = "(?i)^\.\.(?:|\s)"
 acc = "\s([-'0-9a-zÀ-ÿ]+)"
 accs = "\s([-'0-9a-zÀ-ÿ\s]+)"
 session = "Chalet Hiver 2018"
-
+dbpath = "/opt/bots/net-alerts/tes/"
 ###################################################################### Traceback to Slack - Manque le traceback au complet
 def report_exception(exc_type, exc_value, exc_tb):
     sc.api_call("chat.postMessage", username=nickname, channel=dump, icon_emoji=avatar, text="```{0}\n{1}\n{2}```".format(
@@ -76,7 +76,7 @@ def map_user(user):
 # This functions parses the commands
 def command_parse(text,user):
 
-    conn = sqlite3.connect("./metro.db")
+    conn = sqlite3.connect("{0}metro.db".format(dbpath))
     conn.text_factory = str
     c = conn.cursor()
 
