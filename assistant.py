@@ -33,8 +33,10 @@ pid = "/tmp/sassist.pid"
 app = "assistant"
 nickname = "Métro"
 dump = "#dump"
-channel = "#planif"
-wakka = "^\.\.(|\s)"
+channel = "#general"
+wak = "(?i)^\.\.(?:|\s)"
+acc = "\s([-'0-9a-zÀ-ÿ]+)"
+accs = "\s([\s-'0-9a-zÀ-ÿ]+)"
 session = "Chalet Hiver 2018"
 testmode = False
 dbpath = "/opt/bots/net-alerts/tes/"
@@ -78,7 +80,7 @@ def command_parse(text,user):
 
     user = map_user(user)
 
-    if re.search(wakka + "aide", text) is not None:
+    if re.search(wak + "aide", text) is not None:
         report  = "*Chaque commande doit être précédée de ..*"
         report += "\nExemple: `..log` OU `.. log`"
         report += "\n*..log* - Affiche la liste des dépenses"
@@ -88,8 +90,8 @@ def command_parse(text,user):
         report += "\n*..flush* - Éfface toutes les dépense au nom de l'utilisateur"
         slackmsg(report)
 
-    if re.search(wakka + "quote", text) is not None:
-        if re.search(wakka + "quote$", text) is not None:
+    if re.search(wak + "quote", text) is not None:
+        if re.search(wak + "quote$", text) is not None:
             db_rows = c.execute("SELECT * FROM quotes")
             db_rows = db_rows.fetchall()
             if db_rows:
@@ -99,16 +101,16 @@ def command_parse(text,user):
                 slackmsg(report)
             else:
                 slackmsg("La list des citations est vide")
-        elif re.search(wakka + "quote\s(\w*)\s(.*)", text) is not None:
-            r = re.search(wakka + "quote\s(\w*)\s(.*)", text)
+        elif re.search(wak + "quote" + acc + accs, text) is not None:
+            r = re.search(wak + "quote" + acc + accs, text)
             matches = r.groups()
-            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (matches[1],matches[2]))
-            slackmsg("{0} - *{1}*".format(matches[2],matches[1]))
+            c.execute("INSERT INTO quotes (user, quote) Values (?,?)", (matches[0],matches[1]))
+            slackmsg("{0} - *{1}*".format(matches[1],matches[0]))
             conn.commit()
 
-    elif re.search(wakka + "log", text) is not None:
+    elif re.search(wak + "log", text) is not None:
         # user, cash, description, session, timestamp
-        if re.search(wakka + "log$", text) is not None:
+        if re.search(wak + "log$", text) is not None:
             db_rows = c.execute("SELECT * FROM depenses")
             db_rows = db_rows.fetchall()
             if db_rows:
@@ -121,28 +123,24 @@ def command_parse(text,user):
                 slackmsg(report)
             else:
                 slackmsg("La list des dépenses est vide")
-        elif re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(.*)", text) is not None:
-            r = re.search(wakka + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s(.*)", text)
+        elif re.search(wak + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s([-'0-9a-zÀ-ÿ]*)", text) is not None:
+            r = re.search(wak + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s([-'0-9a-zÀ-ÿ]*)", text)
             matches = r.groups()
-            cash = matches[1]
-            desc = matches[2] #if matches[2] else ""
-
+            cash = matches[0]
+            desc = matches[1] #if matches[1] else ""
             c.execute("INSERT INTO depenses (user, cash, description, session, timestamp) Values (?,?,?,?,?)", (user,cash,desc,session,maketimestamp()))
             conn.commit()
-            #db_rows = c.execute("SELECT * FROM depenses WHERE user = ? AND cash = ?",(user,cash))
-            #db_rows = db_rows.fetchall()
             slackmsg("*{0}* a payé {1}$ de {2}".format(user,cash,desc))
-
         else:
             slackmsg("Votre commande est aussi érronée qu'une jobe de moutarde.")
 
 
-    elif re.search(wakka + "flush$", text) is not None:
+    elif re.search(wak + "flush$", text) is not None:
         c.execute("DELETE FROM depenses WHERE user = ?",(user,))
         conn.commit()
         slackmsg("J'ai effacé toutes les dépenses de {0}".format(user))
 
-    elif re.search(wakka + "flush all$", text) is not None:
+    elif re.search(wak + "flush all$", text) is not None:
         if user == "Manu":
             c.execute("DELETE FROM depenses")
             c.execute("DELETE FROM quotes")
@@ -162,7 +160,7 @@ def main():
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
                     user = item.get("user")
-                    if re.search(wakka,message):
+                    if re.search(wak,message):
                         command_parse(message,user)
                 time.sleep(0.5)
         else:
