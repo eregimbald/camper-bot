@@ -125,8 +125,8 @@ def command_parse(text,user):
                 slackmsg(report)
             else:
                 slackmsg("La list des dépenses est vide")
-        elif re.search(wak + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s([-'0-9a-zÀ-ÿ]*)", text) is not None:
-            r = re.search(wak + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s([-'0-9a-zÀ-ÿ]*)", text)
+        elif re.search(wak + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s([-'0-9a-zÀ-ÿ\s]*)", text) is not None:
+            r = re.search(wak + "log " + "(\d{1,4}\.\d{1,2}|\d{1,4})\s([-'0-9a-zÀ-ÿ\s]*)", text)
             matches = r.groups()
             cash = matches[0]
             desc = matches[1] #if matches[1] else ""
