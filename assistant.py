@@ -23,10 +23,10 @@ sc = SlackClient(token)
 avatar = ":metro-robo:"
 
 # Setting up the Web API
-import json
-import requests
-url = "https://hooks.slack.com/services/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"
-headers={'Content-Type': 'application/json'}
+#import json
+#import requests
+#url = "https://hooks.slack.com/services/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"
+#headers={'Content-Type': 'application/json'}
 
 ###################################################################### Vars
 pid = "/tmp/sassist.pid"
@@ -74,7 +74,7 @@ def map_user(user):
 # This functions parses the commands
 def command_parse(text,user):
 
-    conn = sqlite3.connect("./metro.db")
+    conn = sqlite3.connect("./metro.db",charset="utf8")
     c = conn.cursor()
 
     user = map_user(user)
@@ -156,9 +156,9 @@ def main():
         if sc.rtm_connect():
             while True:
                 for item in sc.rtm_read():
+                    user = item.get("user")
                     message = item.get("text")
                     message = message.encode("utf-8") if message else ""
-                    user = item.get("user")
                     if re.search(wak,message):
                         command_parse(message,user)
                 time.sleep(0.5)
